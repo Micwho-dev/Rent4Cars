@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fleet>
+  <car>
+    <id>1</id>
+    <name>Toyota Vios</name>
+    <type>Sedan</type>
+    <powertrain>Gasoline</powertrain>
+    <price>2000</price>
+    <features>Manual/CVT, 5-Seater, High Fuel Efficiency</features>
+    <specifications>
+      <engine>1.3L 4-Cylinder DOHC</engine>
+      <safety>7 SRS Airbags, ABS with EBD, VSC</safety>
+      <fuelEconomy>18-20 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/MH1WsgW1/Toyota-Vios.webp</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>2</id>
+    <name>Mitsubishi Mirage G4</name>
+    <type>Sedan</type>
+    <powertrain>Gasoline</powertrain>
+    <price>1800</price>
+    <features>Compact, Easy Parking, Ideal for City Driving</features>
+    <specifications>
+      <engine>1.2L 3-Cylinder MIVEC</engine>
+      <safety>Dual Airbags, ABS, ISOFIX</safety>
+      <fuelEconomy>21 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/DZ9vP7Kz/Mitsubishi-Mirage-G4.avif</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>3</id>
+    <name>Toyota Innova</name>
+    <type>MPV</type>
+    <powertrain>Diesel</powertrain>
+    <price>3500</price>
+    <features>7-Seater, Family Favorite, Powerful Diesel Engine</features>
+    <specifications>
+      <engine>2.8L 4-Cylinder Turbo Diesel</engine>
+      <safety>SRS Airbags, ABS, Hill Start Assist</safety>
+      <fuelEconomy>12-14 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/mZ92217X/Toyota-Innova.webp</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>4</id>
+    <name>Toyota Corolla Cross</name>
+    <type>SUV</type>
+    <powertrain>Hybrid</powertrain>
+    <price>4500</price>
+    <features>Self-charging Hybrid, Premium Interior, Eco-friendly</features>
+    <specifications>
+      <engine>1.8L 4-Cylinder Hybrid</engine>
+      <safety>Toyota Safety Sense, 7 Airbags</safety>
+      <fuelEconomy>23 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/90yWxsWC/Toyota-Corolla-Cross.avif</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>5</id>
+    <name>Toyota Hilux</name>
+    <type>Pickup</type>
+    <powertrain>Diesel</powertrain>
+    <price>4000</price>
+    <features>4x4/4x2, Rugged, High Ground Clearance</features>
+    <specifications>
+      <engine>2.4L Turbo Diesel</engine>
+      <safety>Active Traction Control, Airbags</safety>
+      <fuelEconomy>10-12 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/1XD9Wb9N/Toyota-Hilux.jpg</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>6</id>
+    <name>Mitsubishi Montero Sport</name>
+    <type>SUV</type>
+    <powertrain>Diesel</powertrain>
+    <price>4500</price>
+    <features>7-Seater, Advanced Safety Tech, Luxury Feel</features>
+    <specifications>
+      <engine>2.4L 4-Cylinder Turbo Diesel</engine>
+      <safety>7-Airbags, ABS+EBD, Brake Assist</safety>
+      <fuelEconomy>11-13 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/L5jHyGHM/Mitsubishi-Montero-Sport.jpg</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>7</id>
+    <name>Suzuki Ertiga Hybrid</name>
+    <type>MPV</type>
+    <powertrain>Hybrid</powertrain>
+    <price>3000</price>
+    <features>Smart Hybrid Tech, 7-Seater, Budget Friendly</features>
+    <specifications>
+      <engine>1.5L 4-Cylinder Hybrid</engine>
+      <safety>Dual Airbags, ABS, ISOFIX</safety>
+      <fuelEconomy>18-20 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/Xq9V2tV6/Suzuki-Ertiga-Hybrid.jpg</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>8</id>
+    <name>Nissan Navara</name>
+    <type>Pickup</type>
+    <powertrain>Diesel</powertrain>
+    <price>4000</price>
+    <features>Best-in-class Suspension, Multi-link Rear Springs</features>
+    <specifications>
+      <engine>2.5L Turbo Diesel</engine>
+      <safety>NIM Safety Suite, 6 Airbags</safety>
+      <fuelEconomy>10-12 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/NM3skQwh/Nissan-Navara.webp</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>9</id>
+    <name>Honda City</name>
+    <type>Sedan</type>
+    <powertrain>Gasoline</powertrain>
+    <price>2500</price>
+    <features>Sporty Design, Honda Sensing Safety, Tech-heavy</features>
+    <specifications>
+      <engine>1.5L i-VTEC</engine>
+      <safety>Honda SENSING, 6 Airbags</safety>
+      <fuelEconomy>19-21 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/sXkj43CN/Honda-City.jpg</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>10</id>
+    <name>Geely Coolray</name>
+    <type>Crossover</type>
+    <powertrain>Gasoline</powertrain>
+    <price>3200</price>
+    <features>Turbocharged, Modern Tech, 360-degree Camera</features>
+    <specifications>
+      <engine>1.5L Turbo Direct Injection</engine>
+      <safety>APA, Blind Spot Detection</safety>
+      <fuelEconomy>14-16 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/sXkj43CJ/Geely-Coolray.webp</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>11</id>
+    <name>Toyota Minivan</name>
+    <type>Compacts</type>
+    <powertrain>Gasoline</powertrain>
+    <price>2500</price>
+    <features>Versatile Seating, Fuel Efficient, Easy to Drive</features>
+    <specifications>
+      <engine>1.5L Fuel Efficient Engine</engine>
+      <safety>Dual Airbags, ABS, Parking Sensors</safety>
+      <fuelEconomy>16-18 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/7hxfvxfD/Mini-Van.webp</image>
+    <status>Available</status>
+  </car>
+  <car>
+    <id>12</id>
+    <name>Toyota Hiace</name>
+    <type>Vans</type>
+    <powertrain>Diesel</powertrain>
+    <price>3500</price>
+    <features>12-15 Seater, Spacious Cargo, Reliable Workhorse</features>
+    <specifications>
+      <engine>2.8L Turbo Diesel</engine>
+      <safety>Dual Airbags, ABS, High-Rigidity Body</safety>
+      <fuelEconomy>10-12 km/L</fuelEconomy>
+    </specifications>
+    <image>https://i.postimg.cc/vTQcRQcY/Hi-Ace.jpg</image>
+    <status>Available</status>
+  </car>
+</fleet>

@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap');
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-primary: #ff3b3b;
+  --color-primary-dark: #d32f2f;
+
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f4f4f5;
+  --color-gray-200: #e4e4e7;
+  --color-gray-300: #d4d4d8;
+  --color-gray-400: #a1a1aa;
+  --color-gray-500: #71717a;
+  --color-gray-600: #52525b;
+  --color-gray-700: #27272a;
+  --color-gray-800: #18181b;
+  --color-gray-900: #09090b;
+  --color-gray-950: #000000;
+}
+
+@layer base {
+  body {
+    @apply bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-50 font-sans antialiased transition-colors duration-200;
+  }
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+.glass {
+  @apply bg-white/70 dark:bg-gray-950/70 backdrop-blur-md border border-white/20 dark:border-white/10;
+}
+
+.morph-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+:is(:not(.dark) .morph-bg) {
+  background: radial-gradient(circle at 50% 50%, #fff 0%, #f3f4f6 100%);
+}
+
+:is(.dark .morph-bg) {
+  background: radial-gradient(circle at 50% 50%, #000000 0%, #000000 100%);
+}
+
+.morph-blob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle at center, rgba(255, 59, 59, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+}

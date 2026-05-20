@@ -1,0 +1,8 @@
+{
+  "name": "Rent4Cars",
+  "description": "Premium vehicle logistics and service portal with real-time mechanic chat, XML-driven fleet management, and secure cross-border service documentation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

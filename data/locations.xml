@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locations>
+  <hub>
+    <id>L1</id>
+    <city>Davao City</city>
+    <country>Philippines</country>
+    <address>SM City Davao, Quimpo Blvd, Talomo, Davao City</address>
+    <lat>7.0505</lat>
+    <lng>125.5946</lng>
+    <type>Car4Rent Main</type>
+  </hub>
+  <hub>
+    <id>L2</id>
+    <city>Mati City</city>
+    <country>Philippines</country>
+    <address>City Hall, Mati City, Davao Oriental</address>
+    <lat>6.9583</lat>
+    <lng>126.2163</lng>
+    <type>Car4Rent Branch</type>
+  </hub>
+  <hub>
+    <id>L3</id>
+    <city>Digos City</city>
+    <country>Philippines</country>
+    <address>Digos City Center, Davao del Sur</address>
+    <lat>6.7592</lat>
+    <lng>125.3551</lng>
+    <type>Car4Rent Branch</type>
+  </hub>
+</locations>
