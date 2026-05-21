@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Rent4Cars — System Requirements Explanation</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #1e293b; font-size: 13px; line-height: 1.6; }
+.cover { position: relative; background: #ffffff; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 5rem 8%; page-break-after: always; overflow: hidden; z-index: 1; }
+.cover::after { content: ""; position: absolute; bottom: 0; right: -2%; width: 65%; height: 65%; background: url('https://i.postimg.cc/597c9v7L/Car-without-background.png') bottom right/contain no-repeat; pointer-events: none; z-index: -1; }
+.cover .main-logo { height: 160px; margin-bottom: 1.5rem; object-fit: contain; object-position: left; }
+.cover h1 { font-size: 3.5rem; font-weight: 900; color: #1e293b; margin-bottom: 0.5rem; letter-spacing: -1px; }
+.cover h2 { font-size: 1.5rem; font-weight: 400; color: #64748b; margin-bottom: 2.5rem; }
+.cover .meta { background: #f8fafc; border-left: 5px solid #ef4444; border-radius: 0 8px 8px 0; padding: 1.5rem 2rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+.cover .meta p { margin: 0.5rem 0; font-size: 1.05rem; color: #475569; }
+.cover .meta strong { color: #0f172a; display: inline-block; width: 100px; }
+.page { padding: 2.5rem 3rem; page-break-before: always; }
+.toc { padding: 2.5rem 3rem; page-break-after: always; }
+.toc h2 { font-size: 1.5rem; font-weight: 700; color: #ef4444; border-bottom: 3px solid #ef4444; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+.toc ol { padding-left: 1.5rem; }
+.toc li { margin: 0.4rem 0; font-size: 0.95rem; }
+.sec-title { font-size: 1.5rem; font-weight: 800; color: #ef4444; border-left: 5px solid #ef4444; padding-left: 1rem; margin-bottom: 1.5rem; }
+.sub { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 1.2rem 0 0.6rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.25rem; }
+p { margin-bottom: 0.6rem; color: #334155; }
+ul, ol { padding-left: 1.5rem; margin-bottom: 0.6rem; }
+li { margin: 0.25rem 0; color: #334155; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.82rem; }
+th { background: #ef4444; color: white; padding: 0.5rem 0.75rem; text-align: left; }
+td { padding: 0.45rem 0.75rem; border-bottom: 1px solid #e2e8f0; }
+tr:nth-child(even) td { background: #f8fafc; }
+.badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+.b-blue { background: #dbeafe; color: #1d4ed8; }
+.b-green { background: #dcfce7; color: #15803d; }
+.b-red { background: #fee2e2; color: #b91c1c; }
+.b-purple { background: #ede9fe; color: #6d28d9; }
+.info { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 0.6rem 1rem; border-radius: 0 8px 8px 0; margin: 0.6rem 0; font-size: 0.85rem; }
+.arch { background: #0f172a; color: #94a3b8; font-family: 'Courier New', monospace; font-size: 0.72rem; padding: 1rem 1.2rem; border-radius: 8px; margin: 0.8rem 0; white-space: pre; line-height: 1.7; }
+.file-ref { font-family: 'Courier New', monospace; font-weight: bold; color: #b91c1c; }
+@media print { .page, .toc { page-break-before: always; } }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <img class="main-logo" src="https://i.postimg.cc/8Cf9rk6h/rent4cars-no-background.png" alt="Rent4Cars Logo" />
+  <h1>Rent4Cars</h1>
+  <h2>System Requirements Explanation</h2>
+  <div class="meta">
+    <p><strong>Document:</strong> Requirements Mapping</p>
+    <p><strong>Version:</strong> 1.0.0</p>
+    <p><strong>Group:</strong> Mico and Friends</p>
+    <p><strong>Year:</strong> 2026</p>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li>Messaging System</li>
+    <li>XML Data Modeling and Usage</li>
+    <li>XML Parsing (DOM)</li>
+    <li>XSL and XSLT Transformation</li>
+    <li>Scripting Languages (Bash/PowerShell)</li>
+  </ol>
+</div>
+
+<!-- SECTION 1 -->
+<div class="page" id="s1">
+  <div class="sec-title">1. Messaging System</div>
+  
+  <p>The system integrates three core messaging components to fulfill the messaging requirements, utilizing Express backend mechanics to simulate Message Broker and Queue functionality.</p>
+  
+  <div class="sub">1.1 Real-time Chat System (<span class="file-ref">server.ts - Line 243</span>)</div>
+  <p>A live support chat interface is implemented via the <code>/api/messages</code> endpoint and <strong>Socket.io WebSocket connections</strong>. Users communicate dynamically with human admins on the platform in real-time, bridging queries to logistics teams instantly without needing page reloads.</p>
+
+  <div class="sub">1.2 Task Queue System</div>
+  <p>A message queue acts as the system's background task runner. The <code>messageQueue</code> array in <code>server.ts</code> offloads incoming API requests over to a background <code>setInterval</code> consumer loop (acting like a simulated Kafka worker). It processes messages systematically, broadcasts them via Socket.io to admins and users, prevents overwhelming the server synchronously, and writes them durably to XML storage asynchronously.</p>
+  
+  <div class="sub">1.3 Notification System (<span class="file-ref">server.ts - Lines 522 & 525</span>)</div>
+  <p>Updates about system maintenance and message resolutions are brokered through the <code>produceNotification()</code> function (line 525). Events are sequentially logged to a <code>notificationQueue</code> (line 522) and flushed by a dedicated consumer process loop (line 536) to <code>notifications_log.xml</code> securely.</p>
+</div>
+
+<!-- SECTION 2 -->
+<div class="page" id="s2">
+  <div class="sec-title">2. XML Data Modeling and Usage</div>
+  
+  <p>To eliminate standard relational database dependency on primitive entities, Rent4Cars builds entirely upon robust, local XML storage ensuring structured hierarchies and integrity.</p>
+
+  <div class="sub">Where to look: <span class="file-ref">/data/</span> Directory</div>
+  <ul>
+    <li><span class="badge b-blue">fleet.xml</span>: Defines <code>&lt;fleet&gt;</code> and <code>&lt;car&gt;</code> tags modeling all rental inventory and specifications.</li>
+    <li><span class="badge b-green">locations.xml</span>: Maps real-world operational hubs inside <code>&lt;locations&gt;</code> utilizing parameters like <code>&lt;city&gt;</code>, <code>&lt;address&gt;</code>, and <code>&lt;lat&gt;/&lt;lng&gt;</code>.</li>
+    <li><span class="badge b-red">messages.xml</span>: Captures multi-directional user chats in <code>&lt;message&gt;</code> components.</li>
+    <li><span class="badge b-purple">wishlist_activity.xml</span>: Event logging tool preserving user wishlist action trails wrapped under <code>&lt;wishlist_activities&gt;</code> tag groups.</li>
+  </ul>
+</div>
+
+<!-- SECTION 3 -->
+<div class="page" id="s3">
+  <div class="sec-title">3. XML Parsing (DOM)</div>
+
+  <p>Rent4Cars opts primarily for <strong>DOM Parsing (tree-based approach)</strong> for reading XML schemas across the application environment.</p>
+
+  <div class="sub">Implementation Details (<span class="file-ref">server.ts - Lines 71 & 103</span>)</div>
+  <p>Using the <code>@xmldom/xmldom</code> library, raw XML strings are injected into <code>DOMParser().parseFromString(xmlStr, "text/xml")</code>, converting the text into a fully navigable DOM document tree. </p>
+  <ul>
+    <li>To read the document systematically, functions utilize standard selectors: <code>doc.getElementsByTagName("hub")</code>.</li>
+    <li>This pattern extracts key parameters sequentially via <code>.textContent</code> directly off the node properties as seen aggressively inside both <code>/api/fleet</code> (line 71) and <code>/api/locations</code> (line 103) GET controllers.</li>
+    <li>For mutations, items use <code>doc.createElement()</code> and re-serialize the entire DOM securely back to the file system format through <code>new XMLSerializer().serializeToString()</code>.</li>
+  </ul>
+</div>
+
+<!-- SECTION 4 -->
+<div class="page" id="s4">
+  <div class="sec-title">4. XSL and XSLT Transformation</div>
+
+  <p>Instead of mapping JSON to interface manually via custom logic, XSLT renders complete markup modules instantly directly upon server request.</p>
+  
+  <div class="info"><strong>Engine Used:</strong> We utilize the <code>xslt-processor</code> NPM package in <code>server.ts</code>.</div>
+
+  <div class="sub">4.1 XML to HTML Pipeline (<span class="file-ref">server.ts - Line 712</span>)</div>
+  <ul>
+    <li>The primary conversion occurs inside <code>/api/chat-history</code> (line 712).</li>
+    <li>The raw chat log (<code>messages.xml</code>) aligns with its transformation template (<code>messages_to_html.xslt</code>).</li>
+    <li>The engine executes <code>xsltProcess(xml, xslt)</code> dynamically returning styled, class-ready <code>text/html</code> strings capable of instant UI painting without frontend data mapping.</li>
+  </ul>
+  
+  <div class="sub">4.2 Report Generation (<span class="file-ref">server.ts - Line 677</span>)</div>
+  <ul>
+    <li>The <code>/api/notifications/report</code> pipeline (line 677) filters individual nodes against a specific <code>userId</code> parameter.</li>
+    <li>It recompiles an intermediate XML tree dynamically using <code>filteredDoc.importNode()</code>.</li>
+    <li>It then projects that data through a unique XSL template (<code>notifications_report.xslt</code>) yielding a beautiful, isolated report view directly into the web browser interface.</li>
+  </ul>
+</div>
+
+<!-- SECTION 5 -->
+<div class="page" id="s5">
+  <div class="sec-title">5. Automation using Scripting Languages</div>
+
+  <p>To safely maintain the operational health of Rent4Cars without demanding manual administrative supervision, automation scripts have been provisioned.</p>
+
+  <div class="sub">5.1 Bash Notification Cleanup (<span class="file-ref">/scripts/cleanup_notifications.sh</span>)</div>
+  <ul>
+    <li><strong>Purpose:</strong> A functional Bash deployment to act as a system monitor/archiver for oversized log arrays.</li>
+    <li><strong>Process:</strong> The script systematically analyzes the <code>notifications_log.xml</code> filepath upon activation.</li>
+    <li><strong>Execution:</strong> It generates a timestamped safe-state backup directory (`/data/backups/`) and copies the active log over, ensuring preservation of prior XML data points. This script supports background execution via standard chron jobs inside deployment hardware.</li>
+    <li><strong>Setup Automation:</strong> We also include a <code>start.bat</code> and <code>system_setup.sh</code> script at the root directory granting instant environmental cross-platform deployments (Windows/Linux) and background service bootstrapping in seconds.</li>
+  </ul>
+
+  <div style="margin-top:3rem; text-align:center; color:#64748b; font-size:0.8rem; border-top:1px solid #e2e8f0; padding-top:1.5rem;">
+    <p>🚗 Rent4Cars — System Requirements Mapping v1.0</p>
+    <p>Group: Mico and Friends · 2026</p>
+  </div>
+</div>
+
+</body>
+</html>

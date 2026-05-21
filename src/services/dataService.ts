@@ -47,9 +47,10 @@ export const MessagingService = {
     return response.json();
   },
 
-  async getChatHistoryHtml() {
+  async getChatHistoryHtml(userId?: string) {
     try {
-      const response = await fetch('/api/chat-history');
+      const url = userId ? `/api/chat-history?userId=${userId}` : '/api/chat-history';
+      const response = await fetch(url);
       return await response.text();
     } catch (e) {
       // Ignore network errors during polling

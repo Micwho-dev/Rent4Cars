@@ -7,15 +7,51 @@ import { Xslt, XmlParser } from "xslt-processor";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { createClient } from "@supabase/supabase-js";
+import { Server as SocketIOServer } from "socket.io";
 import "dotenv/config";
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
-  
-  const httpServer = http.createServer(app);
+const app = express();
+const httpServer = http.createServer(app);
+const io = new SocketIOServer(httpServer, {
+  cors: { origin: "*" }
+});
 
-  // Initialize Supabase (Server-side)
+// Socket.io Admin & User Session Management
+const activeUsers = new Map<string, { id: string, name: string, avatar: string, unread: number }>();
+
+io.on("connection", (socket) => {
+  console.log("Socket connected:", socket.id);
+
+  socket.on("join-user", (user: { id: string, name: string, avatar?: string }) => {
+    socket.join(user.id);
+    activeUsers.set(user.id, { id: user.id, name: user.name, avatar: user.avatar || '', unread: 0 });
+    io.to("admins").emit("active-users", Array.from(activeUsers.values()));
+  });
+
+  socket.on("join-admin", () => {
+    socket.join("admins");
+    socket.emit("active-users", Array.from(activeUsers.values()));
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected:", socket.id);
+  });
+});
+
+// Safe write helper for Vercel's read-only filesystem
+function safeWriteXML(filePath: string, data: string) {
+  try {
+    fs.writeFileSync(filePath, data);
+  } catch (err: any) {
+    if (err.code === 'EROFS') {
+      console.warn(`[Vercel] Ignored write to read-only filesystem: ${filePath}`);
+    } else {
+      console.error(`[FS] Write error for ${filePath}:`, err.message);
+    }
+  }
+}
+
+// Initialize Supabase (Server-side)
   const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || "";
   
@@ -129,9 +165,6 @@ async function startServer() {
   console.log("Notification Consumer Started.");
   
   // Simulation: Background Consumer Loop
-  let lastMechanicAiCall = 0;
-  const MIN_BOT_COOLDOWN = 4000; // 4 seconds between bot replies to conserve quota
-
   setInterval(() => {
     if (messageQueue.length > 0) {
       const msg = messageQueue.shift();
@@ -161,79 +194,24 @@ async function startServer() {
         root.appendChild(msgNode);
         
         const serialized = new XMLSerializer().serializeToString(doc);
-        fs.writeFileSync(filePath, serialized);
+        safeWriteXML(filePath, serialized);
         
-        // Simulation: Mechanic Auto-Reply + Maintenance Alert
-        if (msg.senderRole === "customer") {
-           // Skip AI if we called it too recently to conserve quota
-           const now = Date.now();
-           if (now - lastMechanicAiCall < MIN_BOT_COOLDOWN) {
-              console.log("[Mechanic-Bot] Rate limiting AI reply to conserve user quota.");
-              messageQueue.push({
-                senderName: "DAVAO-LOGISTICS",
-                senderRole: "system",
-                userId: msg.userId,
-                text: "Message received. Our Davao specialist is currently handling another ticket. We will respond shortly via secure trail."
-              });
-              return;
-           }
-
-           lastMechanicAiCall = now;
-
-           setTimeout(async () => {
-              let replyText = `Acknowledged. Kafka offset ${Math.floor(Math.random() * 1000)} logged. A specialist will review your inquiry shortly.`;
-              
-              if (apiKey) {
-                try {
-                  const fleetXml = fs.readFileSync(path.join(DATA_PATH, "fleet.xml"), "utf-8");
-                  const mechanicSysPrompt = `
-                    You are a master car mechanic for Rent4Cars in Davao City. 
-                    You are monitoring the logistics support gateway for Davao and Mindanao regions.
-                    
-                    Current Fleet Inventory:
-                    ${fleetXml}
-                    
-                    Guidelines:
-                    1. Answer technical questions about cars or availability in Davao.
-                    2. Use the fleet inventory to be specific about prices (in PHP).
-                    3. Stay in character as a professional mechanic from Davao.
-                    4. Address the customer by their name (${msg.senderName}) in your response.
-                    5. Keep it concise.
-                    6. DO NOT use markdown formatting (like **bold** or *italics*). Respond with clean plain text only.
-                  `;
-                  
-                  const aiResponse = await ai.models.generateContent({
-                    model: "gemini-3.5-flash",
-                    contents: [{ role: 'user', parts: [{ text: msg.text }] }],
-                    config: { systemInstruction: mechanicSysPrompt }
-                  });
-                  
-                  replyText = aiResponse.text || "Message logged. Our experts will respond shortly.";
-                } catch (e: any) {
-                  console.error("Mechanic AI error:", e);
-                  if (e?.status === 429 || e?.status === 503 || (typeof e?.message === 'string' && (e.message.includes('429') || e.message.includes('503') || e.message.includes('UNAVAILABLE')))) {
-                    replyText = "The logistics support AI is currently experiencing high demand. I am processing your inquiry manually-logged via XML. Please follow up in a few minutes.";
-                  }
-                }
-              }
-
-              // Produce maintenance notification back to user (PER USER)
-              produceNotification({
-                type: 'maintenance',
-                priority: 'normal',
-                title: 'Mechanic Update',
-                message_body: `Specialist feedback for ${msg.senderName}: Logged under secure XML trail.`,
-                userId: msg.userId
-              });
-
-              messageQueue.push({
-                senderName: "Mechanic",
-                senderRole: "mechanic",
-                userId: msg.userId,
-                text: replyText
-              });
-           }, 2000);
+        // Socket.io Broadcast
+        const messagePayload = {
+          senderName: msg.senderName,
+          senderRole: msg.senderRole,
+          text: msg.text,
+          userId: msg.userId,
+          timestamp: new Date().toLocaleTimeString()
+        };
+        
+        // Send to Admins
+        io.to("admins").emit("new-message", messagePayload);
+        // Send back to the user room
+        if (msg.userId) {
+          io.to(msg.userId).emit("new-message", messagePayload);
         }
+
       } catch (err) {
         console.error("Failed to update messages XML", err);
       }
@@ -406,7 +384,7 @@ async function startServer() {
   const WISHLIST_LOG_PATH = path.join(DATA_PATH, "wishlist_activity.xml");
   
   if (!fs.existsSync(WISHLIST_LOG_PATH)) {
-    fs.writeFileSync(WISHLIST_LOG_PATH, `<?xml version="1.0" encoding="UTF-8"?>
+    safeWriteXML(WISHLIST_LOG_PATH, `<?xml version="1.0" encoding="UTF-8"?>
 <wishlist_activities>
 </wishlist_activities>`);
   }
@@ -434,7 +412,7 @@ async function startServer() {
       activityNode.appendChild(createChild("timestamp", new Date().toISOString()));
       
       root.appendChild(activityNode);
-      fs.writeFileSync(WISHLIST_LOG_PATH, new XMLSerializer().serializeToString(doc));
+      safeWriteXML(WISHLIST_LOG_PATH, new XMLSerializer().serializeToString(doc));
 
       // Simulated Kafka Payload for Admin Analytics
       console.log(`[Kafka-Analytics] Wishlist Event Produced: ${actionType} for ${carName} (User: ${userId})`);
@@ -505,7 +483,7 @@ async function startServer() {
   
   // Initialize XML if missing
   if (!fs.existsSync(NOTIF_PATH)) {
-    fs.writeFileSync(NOTIF_PATH, `<?xml version="1.0" encoding="UTF-8"?>
+    safeWriteXML(NOTIF_PATH, `<?xml version="1.0" encoding="UTF-8"?>
 <notifications_log>
   <notification priority="high">
     <id>MSG-001</id>
@@ -567,7 +545,7 @@ async function startServer() {
         notifNode.appendChild(createChild("recipient_uid", notif.userId || "all"));
 
         root.appendChild(notifNode);
-        fs.writeFileSync(NOTIF_PATH, new XMLSerializer().serializeToString(doc));
+        safeWriteXML(NOTIF_PATH, new XMLSerializer().serializeToString(doc));
         console.log(`[Kafka-Notif] Message Consumed for ${notif.userId || 'all'}: ${notif.title}`);
       } catch (err) {
         console.error("Kafka Consumer Error:", err);
@@ -667,7 +645,7 @@ async function startServer() {
         }
       }
 
-      fs.writeFileSync(NOTIF_PATH, new XMLSerializer().serializeToString(doc));
+      safeWriteXML(NOTIF_PATH, new XMLSerializer().serializeToString(doc));
       res.json({ status: "synced" });
     } catch (err) {
       res.status(500).json({ error: "Failed to sync read status" });
@@ -711,7 +689,24 @@ async function startServer() {
   // API: Get Chat History via XSLT
   app.get("/api/chat-history", async (req, res) => {
     try {
-      const xmlStr = fs.readFileSync(path.join(DATA_PATH, "messages.xml"), "utf-8");
+      const userId = req.query.userId as string;
+      let xmlStr = fs.readFileSync(path.join(DATA_PATH, "messages.xml"), "utf-8");
+      
+      if (userId) {
+        const { DOMParser, XMLSerializer } = require('@xmldom/xmldom');
+        const doc = new DOMParser().parseFromString(xmlStr, "text/xml");
+        const messages = doc.getElementsByTagName("message");
+        for (let i = messages.length - 1; i >= 0; i--) {
+            const msg = messages[i];
+            const uidNode = msg.getElementsByTagName("userId")[0];
+            const uid = uidNode?.textContent;
+            if (uid && uid !== userId) {
+                msg.parentNode.removeChild(msg);
+            }
+        }
+        xmlStr = new XMLSerializer().serializeToString(doc);
+      }
+
       const xsltStr = fs.readFileSync(path.join(DATA_PATH, "messages_to_html.xslt"), "utf-8");
       
       const xml = new XmlParser().xmlParse(xmlStr);
@@ -861,27 +856,33 @@ CONVERSATION STYLE:
     }
   });
 
-  // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { 
-        middlewareMode: true,
-        hmr: { server: httpServer }
-      },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
+  // Vercel Export Setup
+  export default app;
+
+  // Local/Custom Deployment Listen Step (only triggers if NOT on Vercel)
+  if (!process.env.VERCEL) {
+    (async () => {
+      // Vite middleware for development
+      if (process.env.NODE_ENV !== "production") {
+        const vite = await createViteServer({
+          server: { 
+            middlewareMode: true,
+            hmr: { server: httpServer }
+          },
+          appType: "spa",
+        });
+        app.use(vite.middlewares);
+      } else {
+        const distPath = path.join(process.cwd(), "dist");
+        app.use(express.static(distPath));
+        app.get("*", (req, res) => {
+          res.sendFile(path.join(distPath, "index.html"));
+        });
+      }
+
+      const PORT = 3000;
+      httpServer.listen(PORT, "0.0.0.0", () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+      });
+    })();
   }
-
-  httpServer.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}
-
-startServer();

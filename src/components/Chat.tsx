@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, FormEvent } from 'react';
 import { MessagingService } from '../services/dataService';
 import { Send, Wrench, MessageSquare, AlertCircle, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { io, Socket } from 'socket.io-client';
 
 interface ChatProps {
   user: any | null;
@@ -14,18 +15,38 @@ export default function Chat({ user, openAuth }: ChatProps) {
   const [isSending, setIsSending] = useState(false);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const fetchHistory = async () => {
-    const html = await MessagingService.getChatHistoryHtml();
+    const html = await MessagingService.getChatHistoryHtml(user.id);
     setMessagesHtml(html);
     setLoading(false);
   };
 
   useEffect(() => {
+    if (!user) return;
     fetchHistory();
-    const interval = setInterval(fetchHistory, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    
+    // Connect to WebSocket
+    const newSocket = io();
+    setSocket(newSocket);
+
+    newSocket.on('connect', () => {
+      const name = user.user_metadata?.full_name || user.displayName || user.email?.split('@')[0] || 'Customer';
+      const avatar = user.user_metadata?.avatar_url || '';
+      newSocket.emit('join-user', { id: user.id, name, avatar });
+    });
+
+    newSocket.on('new-message', (payload) => {
+      // Re-fetch XSLT history since we are mixing rendering styles (backend xslt vs frontend rendering).
+      // Or we can just re-fetch the history entirely when a new message arrives over the socket.
+      setTimeout(fetchHistory, 500); // Give backend time to save XML
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [user]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -42,7 +63,7 @@ export default function Chat({ user, openAuth }: ChatProps) {
     await MessagingService.sendMessage(senderName, 'customer', inputText, user.id);
     setInputText('');
     setIsSending(false);
-    fetchHistory();
+    // Note: The socket will trigger fetchHistory automatically via 'new-message'
   };
 
   if (!user) {

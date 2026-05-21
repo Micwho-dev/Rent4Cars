@@ -185,7 +185,7 @@ export default function Navbar({
               className="bg-primary text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all flex items-center gap-2"
             >
               <LogIn size={16} />
-              Access Portal
+              Login
             </button>
           )}
           <Menu className="md:hidden text-gray-600" />

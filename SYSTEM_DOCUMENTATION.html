@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Rent4Cars — System Documentation</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #1e293b; font-size: 13px; line-height: 1.6; }
+.cover { position: relative; background: #ffffff; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 5rem 8%; page-break-after: always; overflow: hidden; z-index: 1; }
+.cover::after { content: ""; position: absolute; bottom: 0; right: -2%; width: 65%; height: 65%; background: url('https://i.postimg.cc/597c9v7L/Car-without-background.png') bottom right/contain no-repeat; pointer-events: none; z-index: -1; }
+.cover .main-logo { height: 160px; margin-bottom: 1.5rem; object-fit: contain; object-position: left; }
+.cover h1 { font-size: 3.5rem; font-weight: 900; color: #1e293b; margin-bottom: 0.5rem; letter-spacing: -1px; }
+.cover h2 { font-size: 1.5rem; font-weight: 400; color: #64748b; margin-bottom: 2.5rem; }
+.cover .meta { background: #f8fafc; border-left: 5px solid #ef4444; border-radius: 0 8px 8px 0; padding: 1.5rem 2rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+.cover .meta p { margin: 0.5rem 0; font-size: 1.05rem; color: #475569; }
+.cover .meta strong { color: #0f172a; display: inline-block; width: 100px; }
+.page { padding: 2.5rem 3rem; page-break-before: always; }
+.toc { padding: 2.5rem 3rem; page-break-after: always; }
+.toc h2 { font-size: 1.5rem; font-weight: 700; color: #ef4444; border-bottom: 3px solid #ef4444; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+.toc ol { padding-left: 1.5rem; }
+.toc li { margin: 0.4rem 0; font-size: 0.95rem; }
+.sec-title { font-size: 1.5rem; font-weight: 800; color: #ef4444; border-left: 5px solid #ef4444; padding-left: 1rem; margin-bottom: 1.5rem; }
+.sub { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 1.2rem 0 0.6rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.25rem; }
+p { margin-bottom: 0.6rem; color: #334155; }
+ul, ol { padding-left: 1.5rem; margin-bottom: 0.6rem; }
+li { margin: 0.25rem 0; color: #334155; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.82rem; }
+th { background: #ef4444; color: white; padding: 0.5rem 0.75rem; text-align: left; }
+td { padding: 0.45rem 0.75rem; border-bottom: 1px solid #e2e8f0; }
+tr:nth-child(even) td { background: #f8fafc; }
+.badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+.b-blue { background: #dbeafe; color: #1d4ed8; }
+.b-green { background: #dcfce7; color: #15803d; }
+.b-red { background: #fee2e2; color: #b91c1c; }
+.b-purple { background: #ede9fe; color: #6d28d9; }
+.info { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 0.6rem 1rem; border-radius: 0 8px 8px 0; margin: 0.6rem 0; font-size: 0.85rem; }
+.arch { background: #0f172a; color: #94a3b8; font-family: 'Courier New', monospace; font-size: 0.72rem; padding: 1rem 1.2rem; border-radius: 8px; margin: 0.8rem 0; white-space: pre; line-height: 1.7; }
+.flow { display: flex; align-items: center; gap: 0.4rem; margin: 0.35rem 0; flex-wrap: wrap; }
+.fb { background: #ef4444; color: white; padding: 0.2rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 600; }
+.fb.g { background: #059669; }
+.fb.r { background: #dc2626; }
+.fb.o { background: #d97706; }
+.fa { color: #94a3b8; }
+@media print { .page, .toc { page-break-before: always; } }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <img class="main-logo" src="https://i.postimg.cc/8Cf9rk6h/rent4cars-no-background.png" alt="Rent4Cars Logo" />
+  <h1>Rent4Cars</h1>
+  <h2>Enterprise Car Rental & Logistics Platform</h2>
+  <div class="meta">
+    <p><strong>Document:</strong> System Documentation</p>
+    <p><strong>Version:</strong> 1.0.0</p>
+    <p><strong>Group:</strong> Mico and Friends</p>
+    <p><strong>Year:</strong> 2026</p>
+    <p><strong>Stack:</strong> React 19 · Node.js · Express.js · XML/XSLT · Gemini AI API</p>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li>System Overview
+      <ol><li>Purpose of the System</li><li>Target Users</li></ol>
+    </li>
+    <li>System Architecture
+      <ol><li>Client-Server Diagram</li><li>Message Flow</li><li>Technology Stack</li></ol>
+    </li>
+    <li>Feature Descriptions
+      <ol><li>Messaging System</li><li>XML Usage</li><li>Parsing Methods</li><li>XSLT Transformations</li><li>Scripting Integration</li></ol>
+    </li>
+    <li>Technical Explanation
+      <ol><li>How Each Requirement Was Implemented</li><li>Challenges and Solutions</li></ol>
+    </li>
+    <li>Screenshots / Outputs
+      <ol><li>System Interface</li><li>XML File Samples</li><li>API Endpoints Reference</li></ol>
+    </li>
+  </ol>
+</div>
+
+<!-- SECTION 1 -->
+<div class="page" id="s1">
+  <div class="sec-title">1. System Overview</div>
+
+  <div class="sub">1.1 Purpose of the System</div>
+  <p>Rent4Cars is a comprehensive, full-stack web application designed to streamline the car rental process while providing robust post-booking support. The platform allows users to browse an up-to-date fleet of vehicles, select service hubs for pickup and drop-off, and communicate in real-time with logistics coordinators and AI-augmented expert mechanics for on-the-road troubleshooting.</p>
+  <p>The platform addresses common pain points in traditional car rental services by bridging the gap between simple vehicle reservation and active, on-the-road technical support. By utilizing a real-time WebSocket-powered Admin Live Chat and a localized XML database structure, Rent4Cars ensures that users have immediate, 24/7 access to human support and troubleshooting assistance, significantly enhancing passenger safety, operational efficiency, and overall customer satisfaction during their journeys.</p>
+
+  <div class="info"><strong>Core Mission:</strong> Deliver an end-to-end car rental platform that blends a modern React frontend with robust XML-driven data management, backed by intelligent WebSockets for live human support and logistics.</div>
+
+  <div class="sub">Key Capabilities</div>
+  <ul>
+    <li>Real-time vehicle availability tracking and robust booking flow</li>
+    <li>Admin Live Support powered by Socket.io for instant roadside assistance and diagnostics</li>
+    <li>Interactive live dual-way messaging gateway between users and admins</li>
+    <li>Location and Hub tracking for pick-up/drop-off networks</li>
+    <li>Structured XML data layer replacing traditional relational databases</li>
+    <li>XML-to-HTML translation directly on the backend via XSLT pipelines</li>
+    <li>High-performance SPA using React 19 and Vite</li>
+  </ul>
+
+  <div class="sub">1.2 Target Users</div>
+  <table>
+    <tr><th>Role</th><th>Capabilities</th></tr>
+    <tr>
+      <td><span class="badge b-blue">Tourists & Travelers</span></td>
+      <td>Individuals needing temporary, reliable transportation with easy-to-use booking features and AI assistance.</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-green">Corporate Clients</span></td>
+      <td>Businesses requiring premium fleet vehicles for delegates or extended professional use.</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-red">Local Business Owners</span></td>
+      <td>Users who need specific vehicle types (like SUVs or Vans) for logistics and local operations in and around Davao.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SECTION 2 -->
+<div class="page" id="s2">
+  <div class="sec-title">2. System Architecture</div>
+
+  <div class="sub">2.1 Client-Server Architecture</div>
+  <div class="arch">
+┌──────────────────────────── CLIENT LAYER ────────────────────────────┐
+│                                                                       │
+│   [Web Browser]                                                       │
+│   React 19 SPA                                                        │
+│   Tailwind CSS · Framer Motion                                        │
+│                                                                       │
+└───────────────────────────────┬───────────────────────────────────────┘
+                                │  HTTPS REST + WebSocket (HMR)
+┌───────────────────────────────▼───────────────────────────────────────┐
+│                         SERVER LAYER                                  │
+│                                                                       │
+│   Node.js + Express.js  (Port 3000)                                   │
+│   ┌─────────────┐  ┌──────────────┐  ┌──────────────────────────┐     │
+│   │  REST API   │  │ Vite Middle- │  │ Socket.io (WebSocket)    │     │
+│   │  /api/*     │  │ ware Server  │  │ Live Admin Sessions      │     │
+│   └─────────────┘  └──────────────┘  └──────────────────────────┘     │
+│   Middleware: XSLT Processor · XML Parser · API Error Boundaries      │
+└───────────────────────────────┬───────────────────────────────────────┘
+                                │
+┌───────────────────────────────▼───────────────────────────────────────┐
+│                          DATA LAYER                                   │
+│   ┌──────────────────────┐      ┌──────────────────────────────────┐  │
+│   │ Local XML Storage    │      │  Supabase / PostgreSQL           │  │
+│   │ data/fleet.xml       │      │  User Sessions / Extras          │  │
+│   │ data/locations.xml   │      │                                  │  │
+│   │ data/messages.xml    │      │                                  │  │
+│   └──────────────────────┘      └──────────────────────────────────┘  │
+└───────────────────────────────────────────────────────────────────────┘</div>
+
+  <div class="sub">2.2 System Message Flow (Admin Live Support)</div>
+  <div class="flow"><div class="fb r">User Sends Chat</div><div class="fa">→</div><div class="fb">POST /api/messages</div><div class="fa">→</div><div class="fb g">Express Backend</div></div>
+  <div class="flow" style="margin-left:1rem"><div class="fa">↓</div></div>
+  <div class="flow"><div class="fb o">Read/Parse XML</div><div class="fa">→</div><div class="fb">Append User Msg via DOM</div><div class="fa">→</div><div class="fb g">Save messages.xml</div></div>
+  <div class="flow" style="margin-left:1rem"><div class="fa">↓</div></div>
+  <div class="flow"><div class="fb o">Socket.io Emission</div><div class="fa">→</div><div class="fb">Broadcast Payload</div><div class="fa">→</div><div class="fb g">Admin Receives Event</div></div>
+  <div class="flow" style="margin-left:1rem"><div class="fa">↓</div></div>
+  <div class="flow"><div class="fb o">Admin Responds Via Socket</div><div class="fa">→</div><div class="fb">Save to messages.xml</div><div class="fa">→</div><div class="fb g">Broadcast back to User</div></div>
+
+  <div class="sub">2.3 Technology Stack</div>
+  <table>
+    <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+    <tr><td>Frontend Frame</td><td>React 19 + TypeScript</td><td>Type-safe, fast view rendering</td></tr>
+    <tr><td>Styling</td><td>Tailwind CSS</td><td>Rapid, responsive styling and typography</td></tr>
+    <tr><td>Animations</td><td>Framer Motion</td><td>Smooth page transitions and component states</td></tr>
+    <tr><td>Backend Server</td><td>Node.js + Express</td><td>API Gateway and file management router</td></tr>
+    <tr><td>AI Model</td><td>Google Gemini API</td><td>Powering the virtual mechanic and dynamic replies</td></tr>
+    <tr><td>Data Storage</td><td>Local XML Documents</td><td>Highly structured, portable data storage</td></tr>
+    <tr><td>XML Engine</td><td>@xmldom/xmldom</td><td>DOM parsing and serialization of XML files</td></tr>
+    <tr><td>Transformation</td><td>xslt-processor</td><td>Converting raw XML string data to HTML</td></tr>
+    <tr><td>Dev Server</td><td>Vite Middlewares</td><td>Hot Module Replacement and Bundling</td></tr>
+  </table>
+</div>
+
+<!-- SECTION 3 -->
+<div class="page" id="s3">
+  <div class="sec-title">3. Feature Descriptions</div>
+
+  <div class="sub">3.1 Messaging System</div>
+  <p>The system features an active live messaging gateway via WebSockets. Users can contact Rent4Cars support to engage with a human logistics admin or mechanic in real time for booking discussions or car diagnostics. The backend intelligently routes messages between users and the admin portal. This chatbot interface sits persistently on the UI as a floating block, syncing live updates seamlessly.</p>
+
+  <div class="sub">3.2 XML Usage</div>
+  <p>To satisfy structural data requirements, the application relies entirely on XML as a localized data layer. Files such as <code>fleet.xml</code>, <code>locations.xml</code>, and <code>messages.xml</code> map out core entities. This ensures the data is strictly structured, portable, and easily parsable by secondary enterprise systems if required without needing SQL database infrastructures.</p>
+
+  <div class="sub">3.3 Parsing Methods</div>
+  <p>On the Node.js backend, the system utilizes the <code>DOMParser</code> from the <code>@xmldom/xmldom</code> library. When the backend receives a request (e.g., fetching fleet details or adding a message), it reads the physical XML file into a string, parses it into an in-memory DOM object, queries it using standard DOM methods (<code>getElementsByTagName</code>, <code>createElement</code>), and reserializes it back to disk via <code>XMLSerializer</code>.</p>
+
+  <div class="sub">3.4 XSLT Transformations</div>
+  <p>To bridge the gap between strict XML storage and browser-ready presentation dynamically, the system relies on XSLT (Extensible Stylesheet Language Transformations). Stylesheets like <code>messages_to_html.xslt</code> and <code>notifications_report.xslt</code> are processed directly on the server to convert raw XML trees into styled HTML templates, which are then shipped immediately to the React frontend.</p>
+
+  <div class="sub">3.5 Scripting Integration</div>
+  <p>TypeScript heavily orchestrates this flow. <code>server.ts</code> maps HTTP API endpoints (like <code>/api/fleet</code> or <code>/api/messages</code>) to file-system operations. The frontend <code>dataService.ts</code> scripts manage fetching these endpoints safely, processing XSLT-induced payloads, parsing JSON responses automatically, and safely mapping them into React component states.</p>
+</div>
+
+<!-- SECTION 4 -->
+<div class="page" id="s4">
+  <div class="sec-title">4. Technical Explanation</div>
+
+  <div class="sub">4.1 How Each Requirement Was Implemented</div>
+  <p><strong>XML Document Storage:</strong> We created a <code>/data</code> directory housing all <code>.xml</code> databases and `.xslt` templates. This replaces traditional relational stores. Endpoints wrap <code>fs.promises</code> to achieve concurrent reads.</p>
+  <p><strong>XSLT Implementation:</strong> Express routes such as <code>/api/chat-history</code> explicitly load <code>messages.xml</code>, load the corresponding styling template, apply the <code>xslt-processor</code>, and return <code>text/html</code>. The frontend then securely injects this via <code>dangerouslySetInnerHTML</code>.</p>
+  <p><strong>Admin Live Chat:</strong> Implemented using Socket.io within the <code>/api/messages</code> POST route and WebSocket listeners. It establishes a live room-based connection where users join their own channel, and admins join the "admins" channel. Broadcasts are emitted to appropriate socket rooms while safely saving messages through the XML DOM parser asynchronously.</p>
+  <p><strong>Safe Resilience Layer:</strong> Implemented a 3-retry HTTP wrapper (<code>while (retries > 0)</code>) inside the frontend data scripts (<code>dataService.ts</code>) to prevent the UI from failing fast on network stutters, granting Node.js time to recover its event loop during high load.</p>
+
+  <div class="sub">4.2 Challenges Encountered and Solutions</div>
+  <table>
+    <tr><th>Challenge</th><th>Solution</th></tr>
+    <tr>
+      <td><strong>AI Provider Instability & 503 / 429 Errors</strong><br>High traffic caused Gemini to throw UNAVAILABLE exceptions.</td>
+      <td>Implemented robust <code>try/catch</code> error boundary logic on the server API. If the API returns a rate limit (429) or unavailable (503) status or local fetch fails, the system gracefully degrades by logging a fallback message advising the user of manual routing. We also targeted a highly optimized model (gemini-3.5-flash) to bypass preview instability.</td>
+    </tr>
+    <tr>
+      <td><strong>Network Desync / "Failed to fetch" Startup</strong><br>Frontend attempted to load XML data bound before Express fully attached to the port.</td>
+      <td>Built an automatic 3-retry network backoff mechanism inside <code>dataService.ts</code>. If an error occurs, it pauses for 1000ms and tries again, completely stabilizing initial page loads.</td>
+    </tr>
+    <tr>
+      <td><strong>Vite WebSocket Disconnections</strong><br>The HMR WebSocket kept throwing "WebSocket closed without opened" due to misaligned Express routing.</td>
+      <td>Architecturally extracted <code>http.createServer(app)</code> in <code>server.ts</code> and explicitly tied Vite's internal development middleware server to the parent HTTP server instance instead of detaching it.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SECTION 5 -->
+<div class="page" id="s5">
+  <div class="sec-title">5. Screenshots / Outputs</div>
+
+  <div class="sub">5.1 System Interface — Key Modules</div>
+  <table>
+    <tr><th>Page / Feature</th><th>URL Route</th><th>Access</th><th>Description</th></tr>
+    <tr><td>Landing Grid</td><td>/</td><td>Public</td><td>Hero section, Features list, Testimonials, Dark mode support</td></tr>
+    <tr><td>Fleet Inventory</td><td>/fleet</td><td>Public</td><td>Parsed XML datatable representation of vehicles with filters</td></tr>
+    <tr><td>Service Hubs</td><td>/locations</td><td>Public</td><td>Visual mapping nodes representing available regional branches</td></tr>
+    <tr><td>Support Chat</td><td>Floating Module</td><td>All</td><td>Mechanic AI embedded panel rendering purely XSLT styled logs</td></tr>
+    <tr><td>Account Profile</td><td>/profile</td><td>User</td><td>Bookings ledger and historic receipts visualization</td></tr>
+    <tr><td>Admin Workbench</td><td>/admin</td><td>Internal</td><td>Secured dashboard for altering fleet logs and reading messages</td></tr>
+  </table>
+
+  <div class="sub">5.2 XML File Samples</div>
+
+  <p><strong>fleet.xml</strong> — located at data/fleet.xml</p>
+  <div style="background:#0f172a;color:#a8ff78;font-family:'Courier New',monospace;font-size:0.72rem;padding:0.8rem 1rem;border-radius:8px;margin:0.6rem 0;white-space:pre;line-height:1.6;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;fleet&gt;
+    &lt;car id="1"&gt;
+        &lt;name&gt;Toyota Vios&lt;/name&gt;
+        &lt;type&gt;Sedan&lt;/type&gt;
+        &lt;price&gt;2000&lt;/price&gt;
+        &lt;features&gt;Manual, 5 Seats, Air Conditioning&lt;/features&gt;
+        &lt;status&gt;Available&lt;/status&gt;
+    &lt;/car&gt;
+    &lt;car id="2"&gt;
+        &lt;name&gt;Mitsubishi Montero&lt;/name&gt;
+        &lt;type&gt;SUV&lt;/type&gt;
+        &lt;price&gt;3500&lt;/price&gt;
+        &lt;features&gt;Automatic, 7 Seats, GPS&lt;/features&gt;
+        &lt;status&gt;Booked&lt;/status&gt;
+    &lt;/car&gt;
+&lt;/fleet&gt;</div>
+
+  <p><strong>messages.xml</strong> — located at data/messages.xml</p>
+  <div style="background:#0f172a;color:#a8ff78;font-family:'Courier New',monospace;font-size:0.72rem;padding:0.8rem 1rem;border-radius:8px;margin:0.6rem 0;white-space:pre;line-height:1.6;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;messages&gt;
+    &lt;message&gt;
+        &lt;sender&gt;User&lt;/sender&gt;
+        &lt;text&gt;Hello, my engine is making a clicking sound?&lt;/text&gt;
+        &lt;timestamp&gt;2026-05-20T10:00:00Z&lt;/timestamp&gt;
+    &lt;/message&gt;
+    &lt;message&gt;
+        &lt;sender&gt;Mechanic AI&lt;/sender&gt;
+        &lt;text&gt;Mabuhay! A clicking sound typically implies a starter relay issue or a dead battery...&lt;/text&gt;
+        &lt;timestamp&gt;2026-05-20T10:00:05Z&lt;/timestamp&gt;
+    &lt;/message&gt;
+&lt;/messages&gt;</div>
+
+  <div class="sub">5.3 API Endpoints Reference</div>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/api/fleet</td><td>Loads and parses fleet.xml using DOM into JSON</td></tr>
+    <tr><td>GET</td><td>/api/locations</td><td>Returns available operational hub nodes via locations.xml</td></tr>
+    <tr><td>POST</td><td>/api/messages</td><td>Injects a user payload, broadcasts to Socket.io admins, appends to XML</td></tr>
+    <tr><td>GET</td><td>/api/chat-history</td><td>Transmutes messages.xml through XSLT and returns stringified HTML</td></tr>
+    <tr><td>POST</td><td>/api/my-rentals</td><td>Retrieves rental bookings for a specific user</td></tr>
+    <tr><td>POST</td><td>/api/rentals</td><td>Creates a new vehicle rental booking</td></tr>
+    <tr><td>POST</td><td>/api/admin/rentals</td><td>Retrieves all rental bookings (admin)</td></tr>
+    <tr><td>POST</td><td>/api/admin/rentals/update</td><td>Updates the status of a rental booking</td></tr>
+    <tr><td>GET</td><td>/api/wishlist/check</td><td>Checks if a vehicle is in the user's wishlist</td></tr>
+    <tr><td>POST</td><td>/api/wishlist</td><td>Adds a vehicle to the user's wishlist</td></tr>
+    <tr><td>DELETE</td><td>/api/wishlist</td><td>Removes a vehicle from the user's wishlist</td></tr>
+    <tr><td>POST</td><td>/api/wishlist/log</td><td>Records a log of a user adding an item to their wishlist</td></tr>
+    <tr><td>GET</td><td>/api/notifications</td><td>Fetches notifications for a specific user</td></tr>
+    <tr><td>POST</td><td>/api/notifications</td><td>Creates a new notification</td></tr>
+    <tr><td>POST</td><td>/api/notifications/read</td><td>Marks user notifications as read</td></tr>
+    <tr><td>GET</td><td>/api/notifications/report</td><td>Returns a summary report of notifications (admin)</td></tr>
+  </table>
+
+  <div class="sub">5.4 Folder Structure</div>
+  <div style="background:#0f172a;color:#94a3b8;font-family:'Courier New',monospace;font-size:0.72rem;padding:0.8rem 1rem;border-radius:8px;margin:0.6rem 0;white-space:pre;line-height:1.7;">Rent4Cars/
+├── data/
+│   ├── fleet.xml              Vehicle tracking storage
+│   ├── locations.xml          Rental hub mappings
+│   ├── messages.xml           Chat logs base layer
+│   └── messages_to_html.xslt  XSLT stylistic template
+├── src/
+│   ├── components/            React application modular UI
+│   │   ├── AdminRentals.tsx   Admin dashboard for bookings
+│   │   ├── Auth.tsx           User login/registration UI
+│   │   ├── BookingSystem.tsx  Booking creation flow
+│   │   ├── CarCard.tsx        Vehicle tile component
+│   │   ├── CarSpecModal.tsx   Vehicle details and specs
+│   │   ├── Drawer/Modal...    Various UI components
+│   │   └── FloatingChat.tsx   AI Support Chat UI
+│   ├── lib/
+│   │   └── firebase.ts        Firebase integration logic
+│   ├── services/
+│   │   └── dataService.ts     API fetch mapping services
+│   ├── App.tsx                SPA container structure
+│   ├── index.css              Tailwind base imports
+│   └── main.tsx               React mounting point
+├── .env.example               Environment variable template
+├── server.ts                  Express.js backend and Gemini entry
+├── vite.config.ts             Vite/HMR configuration
+└── package.json               Architecture dependency graph</div>
+
+  <div style="margin-top:3rem; text-align:center; color:#64748b; font-size:0.8rem; border-top:1px solid #e2e8f0; padding-top:1.5rem;">
+    <p>🚗 Rent4Cars — Enterprise Car Rental & Logistics Platform</p>
+    <p>System Documentation v1.0 · Prepared for Mark Welly · 2026</p>
+    <p>Built with React · Node.js · Express · XML/XSLT · Gemini AI</p>
+  </div>
+</div>
+
+</body>
+</html>

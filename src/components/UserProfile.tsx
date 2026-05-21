@@ -1,10 +1,9 @@
 import { useState, FormEvent, useRef, ChangeEvent, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { X, User, MapPin, Camera, Save, Loader2, Upload, FileText, Download, Car } from 'lucide-react';
+import { X, User, MapPin, Camera, Save, Loader2, Upload, FileText, Download, Car, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { NotificationService } from '../services/dataService';
 import MyRentals from './MyRentals';
-
 import AdminRentals from './AdminRentals';
 
 interface UserProfileProps {
@@ -269,14 +268,16 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
             </button>
 
             {isAdmin && (
-              <button
-                type="button"
-                onClick={() => setShowAdminRentals(true)}
-                className="w-full py-4 bg-gray-900 border-2 border-gray-800 text-white rounded-2xl font-bold hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
-              >
-                <Car size={20} />
-                Manage All Rentals (Admin)
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => setShowAdminRentals(true)}
+                  className="w-full py-4 bg-gray-900 border-2 border-gray-800 text-white rounded-2xl font-bold hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                >
+                  <Car size={20} />
+                  Manage All Rentals (Admin)
+                </button>
+              </>
             )}
           </form>
 
